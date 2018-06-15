@@ -6,6 +6,11 @@ class WeatherIconUtil {
 
     companion object {
 
+        /**
+         * Generates the html code for the weather icon based on the weather font that has been
+         * used. The relevant value is based on the weather id and the time of the day (if it's
+         * still day or already night).
+         */
         fun setWeatherIcon(actualId: Int, sunrise: Long, sunset: Long): String {
             val id = actualId / 100
             var icon = ""

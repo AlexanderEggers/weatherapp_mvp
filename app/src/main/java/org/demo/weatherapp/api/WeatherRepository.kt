@@ -19,6 +19,10 @@ object WeatherRepository {
 
     private lateinit var presenter: WeatherModelContract.Presenter
 
+    /**
+     * Checks the current cached weather model data. If the cache is outdated or not existing,
+     * the class will try to retrieve new weather data from the server.
+     */
     fun getWeatherData(presenter: WeatherModelContract.Presenter) {
         this.presenter = presenter
 
@@ -35,6 +39,11 @@ object WeatherRepository {
         }
     }
 
+    /**
+     * Fetches weather data from the server. In case the response was successful, the data will be
+     * cached and send to the presenter, else the class will call the presenter to show an error
+     * message.
+     */
     private fun fetchFromNetwork() {
         val networkInterface = Retrofit.Builder().apply {
             baseUrl("http://api.openweathermap.org/data/2.5/")
@@ -61,6 +70,11 @@ object WeatherRepository {
         fetchingData.set(false)
     }
 
+    /**
+     * Converters the server response or cached data to the weather data object which can be used
+     * by the presenter. If the conversion was not successful, the call will call the presenter to
+     * show an error. Else it will send the converted object to the presenter.
+     */
     private fun prepareData(data: String) {
         try {
             gson.fromJson<WeatherModel>(data, WeatherModel::class.java)?.let {
@@ -75,6 +89,10 @@ object WeatherRepository {
         }
     }
 
+    /**
+     * Calls the presenter to let this class know that an error occurred and the underlying view
+     * should display an error.
+     */
     private fun showError() {
         appExecutor.mainThread.execute {
             presenter.presentError()
