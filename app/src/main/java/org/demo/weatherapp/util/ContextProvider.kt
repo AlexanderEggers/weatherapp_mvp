@@ -1,6 +1,5 @@
 package org.demo.weatherapp.util
 
-import android.app.Activity
 import android.content.Context
 import java.lang.ref.WeakReference
 
@@ -19,12 +18,4 @@ object ContextProvider {
          * Returns the current context object.
          */
         get() = contextRef.get()
-
-    /**
-     * Returns the current context instance as an activity.
-     */
-    @Suppress("UNCHECKED_CAST")
-    fun <T : Activity> getActivity(): T? {
-        return contextRef.get() as T?
-    }
 }

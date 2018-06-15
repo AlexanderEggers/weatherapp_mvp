@@ -1,6 +1,5 @@
 package org.demo.weatherapp.api
 
-import android.support.annotation.MainThread
 import android.util.Log
 import com.google.gson.Gson
 import org.demo.weatherapp.BuildConfig
@@ -20,7 +19,6 @@ object WeatherRepository {
 
     private lateinit var presenter: WeatherModelContract.Presenter
 
-    @MainThread
     fun getWeatherData(presenter: WeatherModelContract.Presenter) {
         this.presenter = presenter
 
@@ -37,7 +35,6 @@ object WeatherRepository {
         }
     }
 
-    @MainThread
     private fun fetchFromNetwork() {
         val networkInterface = Retrofit.Builder().apply {
             baseUrl("http://api.openweathermap.org/data/2.5/")

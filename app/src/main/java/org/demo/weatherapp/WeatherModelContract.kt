@@ -20,7 +20,7 @@ interface WeatherModelContract {
     interface Presenter {
         fun presentData(weatherModel: WeatherModel)
 
-        fun retrieveData()
+        fun prepareData()
 
         fun presentError()
     }

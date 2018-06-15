@@ -11,7 +11,7 @@ constructor(private val view: WeatherModelContract.View) : WeatherModelContract.
 
     private val weatherRepository = WeatherRepository
 
-    override fun retrieveData() {
+    override fun prepareData() {
         weatherRepository.getWeatherData(this)
     }
 

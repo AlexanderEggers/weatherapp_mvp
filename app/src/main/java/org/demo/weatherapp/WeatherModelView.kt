@@ -21,11 +21,11 @@ class WeatherModelView : AppCompatActivity(), WeatherModelContract.View {
         }
 
         findViewById<View>(R.id.retry_button).setOnClickListener {
-            presenter.retrieveData()
+            presenter.prepareData()
         }
 
         presenter = WeatherModelPresenter(this)
-        presenter.retrieveData()
+        presenter.prepareData()
     }
 
     override fun showContent() {
