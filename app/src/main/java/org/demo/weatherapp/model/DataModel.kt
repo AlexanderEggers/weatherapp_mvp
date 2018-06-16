@@ -2,7 +2,7 @@ package org.demo.weatherapp.model
 
 import com.google.gson.annotations.SerializedName
 
-class DataModel {
+open class DataModel {
 
     @SerializedName("temp")
     var temp: Double = 0.0

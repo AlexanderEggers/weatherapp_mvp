@@ -26,37 +26,37 @@ interface WeatherModelContract {
         /**
          * Sets the city name inside the view.
          */
-        fun setCityName(cityName: String)
+        fun setCityName(cityName: String?)
 
         /**
          * Sets the time when this weather data has been generated.
          */
-        fun setUpdateTime(updateTime: String)
+        fun setUpdateTime(updateTime: String?)
 
         /**
          * Sets the weather icon inside the view.
          */
-        fun setWeatherIcon(weatherIcon: String)
+        fun setWeatherIcon(weatherIcon: String?)
 
         /**
          * Sets the temperature inside the view.
          */
-        fun setTemp(temp: String)
+        fun setTemp(temp: String?)
 
         /**
          * Sets the description inside the view.
          */
-        fun setDescription(description: String)
+        fun setDescription(description: String?)
 
         /**
          * Sets the humidity inside the view.
          */
-        fun setHumidity(humidity: String)
+        fun setHumidity(humidity: String?)
 
         /**
          * Sets the pressure inside the view.
          */
-        fun setPressure(pressure: String)
+        fun setPressure(pressure: String?)
     }
 
     /**
@@ -79,5 +79,44 @@ interface WeatherModelContract {
          * Present an error to the view.
          */
         fun presentError()
+    }
+
+    /**
+     * Interface which defines the Repository and it's methods.
+     */
+    interface Repository {
+
+        /**
+         * Checks the current cached weather model data. If the cache is outdated or not existing,
+         * the class will try to retrieve new weather data from the server.
+         */
+        fun getWeatherData(presenter: Presenter)
+    }
+
+    /**
+     * Interface which defines the Cache related object and it's methods.
+     */
+    interface Cache {
+
+        /**
+         * Returns true if the stored cache is older more than one hour, otherwise false.
+         */
+        fun isCacheTooOld(): Boolean
+
+        /**
+         * Updates the cached time stamp which is used to determine if the cached weather data is still
+         * up-to-date.
+         */
+        fun updateCacheTime()
+
+        /**
+         * Saves the provided data inside the shared preference object.
+         */
+        fun saveCache(data: String)
+
+        /**
+         * Returns the current stored weather data. If nothing was found, the method will return null.
+         */
+        fun getCache(): String?
     }
 }

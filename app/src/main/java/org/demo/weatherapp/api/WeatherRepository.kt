@@ -5,17 +5,16 @@ import com.google.gson.Gson
 import org.demo.weatherapp.BuildConfig
 import org.demo.weatherapp.WeatherModelContract
 import org.demo.weatherapp.model.WeatherModel
-import retrofit2.Retrofit
-import retrofit2.converter.scalars.ScalarsConverterFactory
 import java.io.IOException
 import java.util.concurrent.atomic.AtomicBoolean
 
-object WeatherRepository {
+open class WeatherRepository: WeatherModelContract.Repository {
 
     private val fetchingData = AtomicBoolean(false)
     private val gson: Gson = Gson()
-    private val appExecutor = AppExecutor
-    private val cacheController = CacheController
+    private val appExecutor = AppExecutor()
+    private val cacheController: WeatherModelContract.Cache = CacheController()
+    private val networkInterface = NetworkUtil.provideNetworkInterface()
 
     private lateinit var presenter: WeatherModelContract.Presenter
 
@@ -23,7 +22,7 @@ object WeatherRepository {
      * Checks the current cached weather model data. If the cache is outdated or not existing,
      * the class will try to retrieve new weather data from the server.
      */
-    fun getWeatherData(presenter: WeatherModelContract.Presenter) {
+    override fun getWeatherData(presenter: WeatherModelContract.Presenter) {
         this.presenter = presenter
 
         if (fetchingData.compareAndSet(false, true)) {
@@ -45,11 +44,6 @@ object WeatherRepository {
      * message.
      */
     private fun fetchFromNetwork() {
-        val networkInterface = Retrofit.Builder().apply {
-            baseUrl("http://api.openweathermap.org/data/2.5/")
-            addConverterFactory(ScalarsConverterFactory.create())
-        }.build().create(NetworkInterface::class.java)
-
         try {
             val networkResponse = networkInterface.getWeatherData(BuildConfig.apiKey)
             val response = networkResponse.execute()
@@ -59,11 +53,10 @@ object WeatherRepository {
                     cacheController.updateCacheTime()
                     cacheController.saveCache(it)
                     prepareData(it)
-                }
+                } ?: showError()
             } else showError()
         } catch (e: IOException) {
             Log.e(WeatherRepository::class.java.name, e.message)
-            e.printStackTrace()
             showError()
         }
 
@@ -84,7 +77,6 @@ object WeatherRepository {
             } ?: showError()
         } catch (e: Exception) {
             Log.e(WeatherRepository::class.java.name, e.message)
-            e.printStackTrace()
             showError()
         }
     }

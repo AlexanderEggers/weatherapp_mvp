@@ -2,18 +2,21 @@ package org.demo.weatherapp.api
 
 import android.content.Context
 import android.content.SharedPreferences
+import org.demo.weatherapp.WeatherModelContract
 import org.demo.weatherapp.util.ContextProvider
 
-object CacheController {
+open class CacheController: WeatherModelContract.Cache {
 
-    private const val INTERVAL_HOUR = 3600000
+    companion object {
+        private const val INTERVAL_HOUR = 3600000
+    }
 
     private val contextProvider: ContextProvider = ContextProvider
 
     /**
      * Returns true if the stored cache is older more than one hour, otherwise false.
      */
-    fun isCacheTooOld(): Boolean {
+    override fun isCacheTooOld(): Boolean {
         contextProvider.context?.let{
             val sharedPreferences: SharedPreferences = it.getSharedPreferences(
                     "org.demo.weatherapp", Context.MODE_PRIVATE)
@@ -29,7 +32,7 @@ object CacheController {
      * Updates the cached time stamp which is used to determine if the cached weather data is still
      * up-to-date.
      */
-    fun updateCacheTime() {
+    override fun updateCacheTime() {
         contextProvider.context?.let{
             val sharedPreferences: SharedPreferences = it.getSharedPreferences(
                     "org.demo.weatherapp", Context.MODE_PRIVATE)
@@ -43,7 +46,7 @@ object CacheController {
     /**
      * Saves the provided data inside the shared preference object.
      */
-    fun saveCache(data: String) {
+    override fun saveCache(data: String) {
         contextProvider.context?.let{
             val sharedPreferences: SharedPreferences = it.getSharedPreferences(
                     "org.demo.weatherapp", Context.MODE_PRIVATE)
@@ -57,7 +60,7 @@ object CacheController {
     /**
      * Returns the current stored weather data. If nothing was found, the method will return null.
      */
-    fun getCache(): String? {
+    override fun getCache(): String? {
         contextProvider.context?.let{
             val sharedPreferences: SharedPreferences = it.getSharedPreferences(
                     "org.demo.weatherapp", Context.MODE_PRIVATE)

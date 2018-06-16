@@ -5,7 +5,7 @@ import android.os.Looper
 import java.util.concurrent.Executor
 import java.util.concurrent.Executors
 
-object AppExecutor {
+open class AppExecutor {
 
     val workerThread: Executor = Executors.newSingleThreadExecutor()
     val mainThread: Executor = MainThreadExecutor()

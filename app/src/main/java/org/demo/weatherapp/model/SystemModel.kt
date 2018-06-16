@@ -2,7 +2,7 @@ package org.demo.weatherapp.model
 
 import com.google.gson.annotations.SerializedName
 
-class SystemModel {
+open class SystemModel {
 
     @SerializedName("country")
     var country: String? = null

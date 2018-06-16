@@ -2,14 +2,13 @@ package org.demo.weatherapp
 
 import org.demo.weatherapp.api.WeatherRepository
 import org.demo.weatherapp.model.WeatherModel
-import org.demo.weatherapp.util.WeatherIconUtil
 import java.text.DateFormat
 import java.util.*
 
 class WeatherModelPresenter
 constructor(private val view: WeatherModelContract.View) : WeatherModelContract.Presenter {
 
-    private val weatherRepository = WeatherRepository
+    private var weatherRepository: WeatherModelContract.Repository = WeatherRepository()
 
     override fun prepareData() {
         weatherRepository.getWeatherData(this)
@@ -28,7 +27,7 @@ constructor(private val view: WeatherModelContract.View) : WeatherModelContract.
         val df = DateFormat.getDateTimeInstance()
         view.setUpdateTime("Last update: " + df.format(Date(weatherModel.dataTime * 1000)))
 
-        view.setWeatherIcon(WeatherIconUtil.setWeatherIcon(
+        view.setWeatherIcon(setWeatherIcon(
                 weatherModel.condition?.get(0)?.conditionId ?: 0,
                 weatherModel.systemData?.sunrise ?: 0 * 1000,
                 weatherModel.systemData?.sunset ?: 0 * 1000))
@@ -38,5 +37,28 @@ constructor(private val view: WeatherModelContract.View) : WeatherModelContract.
 
     override fun presentError() {
         view.showError()
+    }
+
+    private fun setWeatherIcon(actualId: Int, sunrise: Long, sunset: Long): String {
+        val id = actualId / 100
+        var icon = ""
+        if (actualId == 800) {
+            val currentTime = Date().time
+            icon = if (currentTime in sunrise..(sunset - 1)) {
+                "&#xf00d;"
+            } else {
+                "&#xf02e;"
+            }
+        } else {
+            when (id) {
+                2 -> icon = "&#xf01e;"
+                3 -> icon = "&#xf01c;"
+                7 -> icon = "&#xf014;"
+                8 -> icon = "&#xf013;"
+                6 -> icon = "&#xf01b;"
+                5 -> icon = "&#xf019;"
+            }
+        }
+        return icon
     }
 }

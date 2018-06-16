@@ -2,7 +2,7 @@ package org.demo.weatherapp.model
 
 import com.google.gson.annotations.SerializedName
 
-class WeatherModel {
+open class WeatherModel {
 
     @SerializedName("id")
     var id: Int = 0
